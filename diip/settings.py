@@ -62,8 +62,6 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "core.middleware.ApiKeyAuthMiddleware",
-    'core.middleware.AuditMiddleware',
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -185,47 +183,4 @@ LOGGING = {
         "level": "INFO",
     },
 }
-
-REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": [
-        "core.authentication.ApiKeyAuthentication",
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
-    ],
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticated",
-    ],
-    "DEFAULT_THROTTLE_CLASSES": [
-        "rest_framework.throttling.UserRateThrottle",
-        "rest_framework.throttling.AnonRateThrottle",
-        "rest_framework.throttling.ScopedRateThrottle",
-
-    ],
-    "DEFAULT_THROTTLE_RATES": {
-        "user": "100/hour",  # standard logged-in users
-        "anon": "10/hour",   # unauthenticated requests
-        'dashboard': '10/minute', # tighter, 10 requests per minute
-        "webhook": "30/minute", # external integration
-    },
-    "EXCEPTION_HANDLER": "core.exceptions.custom_exception_handler",
-}
-
-
-# === Security Headers ===
-SECURE_BROWSER_XSS_FILTER = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
-X_FRAME_OPTIONS = "DENY"
-SECURE_REFERRER_POLICY = "strict-origin"
-SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin"
-SECURE_CROSS_ORIGIN_EMBEDDER_POLICY = "require-corp"
-
-# Enforce HTTPS in production
-SECURE_SSL_REDIRECT = not DEBUG
-SESSION_COOKIE_SECURE = not DEBUG
-CSRF_COOKIE_SECURE = not DEBUG
-SECURE_HSTS_SECONDS = 31536000  # 1 year
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
-
-
-
 
